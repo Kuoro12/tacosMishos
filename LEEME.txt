@@ -32,3 +32,8 @@ No agregues contraseñas ni claves secretas al código. La clave publishable inc
 
 ACCESO SIN VPN — IMPORTANTE
 Este paquete quita el aviso técnico de reseñas y los asteriscos visibles del formulario, pero no puede por sí solo resolver un bloqueo de red. Si tacosmishos.netlify.app no abre sin VPN, comprueba desde la misma conexión: (1) ¿abre la página pública? (2) si abre, ¿se cargan los productos y reseñas? Si la página completa no abre, investigaremos Netlify/DNS/ruta del proveedor; si la página abre pero productos/reseñas fallan, investigaremos el acceso a Supabase. Un cambio de alojamiento o dominio podría ser necesario y debe probarse antes de migrar. No desactives RLS ni publiques claves secretas.
+
+
+ACTUALIZACIÓN DE INTERFAZ: esta versión mantiene las categorías existentes y las ordena por prioridad; la barra de categorías queda fija al desplazarse; los productos agotados permanecen visibles y no se pueden añadir al carrito; se simplificó el texto principal.
+
+NOTA: Las mejoras de disponibilidad editable de servicios, varias fotos por producto y reseñas por producto requieren cambios adicionales coordinados con Supabase y no deben considerarse terminadas en esta entrega.
