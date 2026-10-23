@@ -130,8 +130,18 @@ body.ticker-fixed-active .categories{top:calc(var(--tm-ticker-height, 36px) + 76
 body.ticker-fixed-active .nav {
   top: var(--tm-ticker-height, 36px) !important;
 }
+  /* --- CORRECCIÓN DE MÁRGENES LATERALES EN MÓVIL --- */
+@media(max-width: 760px) {
+  .navin, .hero, .wrap, .service-shortcuts, .footerin {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  .categories {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}
 </style>
-
 </head>
 <body>
 <div class="topbar" id="businessStatus">🌮 Consultando horario…</div><div class="ticker" id="announcementTicker"><span>🌮 Tacos, combos y mucho sabor. ¡Elige tus favoritos!</span></div>
@@ -189,7 +199,7 @@ const saveAll=()=>{localStorage.setItem('tm_products_v4',JSON.stringify(products
 const saveCart=()=>{localStorage.setItem('tm_cart_v4',JSON.stringify(cart));localStorage.setItem('tm_cart_saved_at',String(Date.now()));};
 function mapDbProduct(r) {
   const rawAvailable =
-    r.disponible ??
+    r. ??
     r.available ??
     r.disponibilidad ??
     r.estado ??
