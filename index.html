@@ -28,6 +28,16 @@
 .service-shortcut strong{display:inline;color:var(--green2)}.service-shortcut small{display:inline;margin-left:5px}
 html,body{max-width:100%;overflow-x:hidden}img,video,iframe{max-width:100%}
 @media(max-width:600px){.navin{padding:10px 12px;gap:8px}.brand{font-size:15px;gap:6px}.brand small{font-size:8px;letter-spacing:.7px}.logo,.brand img{width:40px!important;height:40px!important}.cartbtn,.adminbtn{padding:9px 10px;font-size:12px}.hero{grid-template-columns:minmax(0,1fr)!important;padding:22px 14px 12px;gap:12px}.heroart{display:none}.hero h1{font-size:clamp(27px,8vw,38px)!important;letter-spacing:-.8px!important}.hero p{font-size:15px}.wrap{padding:14px 12px 50px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product{min-width:0}.productbody{padding:11px;min-width:0}.product h3{font-size:14px;overflow-wrap:anywhere;word-break:normal;white-space:normal;line-height:1.3}.product p{font-size:12px;overflow-wrap:anywhere;word-break:normal;white-space:normal;line-height:1.45;display:block}.productfoot{gap:5px}.price{font-size:15px}.site-tabs{gap:3px;padding:7px 5px}.site-tabs a{font-size:11px;padding:8px 9px}.service-shortcuts{padding:0 8px;gap:6px}.service-shortcut{font-size:11px;padding:7px 10px}.sectionhead{align-items:stretch;flex-direction:column}.search{width:100%;min-width:0}.info-grid,.adminlayout{grid-template-columns:minmax(0,1fr)}}
+
+/* Ajustes solicitados: titular en dos líneas y controles persistentes al desplazarse. */
+.hero-title{font-size:clamp(30px,4vw,46px);letter-spacing:-1px;line-height:1.12;margin:12px 0 16px}
+.hero-title span{color:var(--green);display:inline}
+.hero-copy{max-width:520px}
+/* El botón del pedido permanece visible durante el scroll. */
+.cartbtn{position:fixed;right:14px;bottom:16px;z-index:50}
+/* Los filtros permanecen debajo de la cabecera fija al bajar por el menú. */
+.categories{position:sticky;top:76px;z-index:40}
+@media(max-width:760px){.categories{top:58px}.cartbtn{right:12px;bottom:14px}}
 </style>
 </head>
 <body>
@@ -42,7 +52,7 @@ html,body{max-width:100%;overflow-x:hidden}img,video,iframe{max-width:100%}
 <div class="service-shortcut" data-service="no"><span class="service-icon">🏪</span><span><strong>Recogida</strong><small>Disponible</small></span></div>
 </div>
 <div id="page-menu" class="page-view active"><section class="hero" style="grid-template-columns:1fr .65fr;padding-top:25px;padding-bottom:10px">
- <div><h1 style="font-size:clamp(30px,4vw,46px);letter-spacing:-1px">Tu antojo, directo a casa.</h1><p>Descubre nuestros tacos, combos, salsas y otros antojos. Arma tu pedido y envíanoslo por WhatsApp.</p></div>
+ <div><h1 class="hero-title">Tu antojo,<br><span>directo a casa.</span></h1><p class="hero-copy">Descubre nuestros tacos, combos, salsas y otros antojos. Arma tu pedido y envíanoslo por WhatsApp.</p></div>
  <div class="heroart" style="min-height:180px"><img src="logo-tacos-mishos.png" alt="Tacos Mishos" style="width:min(65%,230px);height:auto;border-radius:50%"></div>
 </section>
 <main class="wrap" id="menu">
