@@ -86,41 +86,32 @@ html,body{overflow-x:clip!important;max-width:100%}
 @media(max-width:760px){.categories{top:60px!important}.cartbtn{right:12px!important;bottom:14px!important}}
 /* No dejar que la barra de categorías compita con el modal abierto. */
 body:has(#cartModal.open) .categories{z-index:1!important}
-  
-/* Noticia en movimiento que permanece fija al llegar arriba */
-.ticker {
-  position: relative;
-  overflow: hidden;
-  white-space: nowrap;
-  box-sizing: border-box;
+/* La nota verde sigue fija arriba y en movimiento */
+.topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 200 !important;
 }
-.ticker > span {
-  display: inline-block;
-  min-width: max-content;
-  padding-left: 100%;
-  animation: tmTicker 22s linear infinite;
-  will-change: transform;
+/* La barra del logo y nombre NO queda fija */
+header.nav {
+  position: relative !important;
+  top: auto !important;
 }
-@keyframes tmTicker {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
+/* Mantener fijas las categorías */
+.categories {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: #fffdf8 !important;
 }
-/* Estado fijo activado por JavaScript */
-.ticker.is-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 1000;
-  box-shadow: 0 3px 12px #0002;
-}
-body.ticker-fixed-active .nav {
-  top: var(--tm-ticker-height, 36px) !important;
+/* Mantener fijo Mi pedido */
+.cartbtn {
+  position: fixed !important;
+  right: 16px !important;
+  bottom: 16px !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: 500 !important;
 }
 </style>
 
