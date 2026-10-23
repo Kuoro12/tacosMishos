@@ -97,22 +97,6 @@ header.nav {
   position: relative !important;
   top: auto !important;
 }
-/* Mantener fijas las categorías */
-.categories {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 100 !important;
-  background: #fffdf8 !important;
-}
-/* Mantener fijo Mi pedido */
-.cartbtn {
-  position: fixed !important;
-  right: 16px !important;
-  bottom: 16px !important;
-  top: auto !important;
-  left: auto !important;
-  z-index: 500 !important;
-}
 </style>
 
 </head>
@@ -314,4 +298,4 @@ if(floatingCartButton){document.body.appendChild(floatingCartButton);floatingCar
   measure();
 })();
 </script>
-<div class="lightbox" id="productLightbox" role="dialog" aria-modal="true" aria-label="Fotos del producto" onclick="if(event.target===this)closeProductLightbox()"><button type="button" class="lightbox-close" onclick="closeProductLightbox()">Cerrar ✕</button><button type="button" class="lightbox-nav lightbox-prev" aria-label="Foto anterior" onclick="event.stopPropagation();moveLightboxPhoto(-1)">‹</button><img src="" alt="" draggable="false"><button type="button" class="lightbox-nav lightbox-next" aria-label="Foto siguiente" onclick="event.stopPropagation();moveLightboxPhoto(1)">›</button><div class="lightbox-title"></div><div class="lightbox-count"></div></div>\n</body></html>
+<div class="lightbox" id="productLightbox" role="dialog" aria-modal="true" aria-label="Fotos del producto" onclick="if(event.target===this)closeProductLightbox()"><button type="button" class="lightbox-close" onclick="closeProductLightbox()">Cerrar ✕</button><button type="button" class="lightbox-nav lightbox-prev" aria-label="Foto anterior" onclick="event.stopPropagation();moveLightboxPhoto(-1)">‹</button><img src="" alt="" draggable="false"><button type="button" class="lightbox-nav lightbox-next" aria-label="Foto siguiente" onclick="event.stopPropagation();moveLightboxPhoto(1)">›</button><div class="lightbox-title"></div><div class="lightbox-count"></div></div></body></html>
