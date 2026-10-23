@@ -132,6 +132,28 @@ body.ticker-fixed-active .nav {
     top: calc(var(--tm-ticker-height, 36px) + var(--tm-nav-height, 56px) - 1px) !important;
   }
 }
+  /* Productos agotados siempre visibles en móvil */
+.grid .product,
+.grid .product:has(.soldout){
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+}
+.grid .product .productimg{
+  display: grid !important;
+  visibility: visible !important;
+}
+.grid .product .soldout{
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.grid .product .product-status-soldout{
+  display: inline-flex !important;
+  visibility: visible !important;
+}
 </style>
 
 </head>
