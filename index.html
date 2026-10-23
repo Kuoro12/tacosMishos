@@ -121,6 +121,17 @@ body:has(#cartModal.open) .categories{z-index:1!important}
 body.ticker-fixed-active .nav {
   top: var(--tm-ticker-height, 36px) !important;
 }
+  /* Categorías pegadas debajo de la línea informativa + encabezado, sin separación */
+.categories,
+.categories:is(*){
+  top: calc(var(--tm-ticker-height, 36px) + var(--tm-nav-height, 64px) - 1px) !important;
+  margin-top: 0 !important;
+}
+@media(max-width:760px){
+  .categories{
+    top: calc(var(--tm-ticker-height, 36px) + var(--tm-nav-height, 56px) - 1px) !important;
+  }
+}
 </style>
 
 </head>
@@ -320,6 +331,27 @@ if(floatingCartButton){document.body.appendChild(floatingCartButton);floatingCar
   }, { passive: true });
   window.addEventListener('resize', measure);
   measure();
+})();
+  (function syncStickyStack(){
+  const root   = document.documentElement;
+  const ticker = document.getElementById('announcementTicker');
+  const nav    = document.querySelector('.nav');
+  if(!nav) return;
+
+  function update(){
+    root.style.setProperty('--tm-ticker-height', (ticker ? ticker.offsetHeight : 0) + 'px');
+    root.style.setProperty('--tm-nav-height', nav.offsetHeight + 'px');
+  }
+
+  update();
+  window.addEventListener('resize', update);
+  window.addEventListener('load', update);
+  window.addEventListener('orientationchange', update);
+  if('ResizeObserver' in window){
+    const ro = new ResizeObserver(update);
+    ro.observe(nav);
+    if(ticker) ro.observe(ticker);
+  }
 })();
 </script>
 <div class="lightbox" id="productLightbox" role="dialog" aria-modal="true" aria-label="Fotos del producto" onclick="if(event.target===this)closeProductLightbox()"><button type="button" class="lightbox-close" onclick="closeProductLightbox()">Cerrar ✕</button><button type="button" class="lightbox-nav lightbox-prev" aria-label="Foto anterior" onclick="event.stopPropagation();moveLightboxPhoto(-1)">‹</button><img src="" alt="" draggable="false"><button type="button" class="lightbox-nav lightbox-next" aria-label="Foto siguiente" onclick="event.stopPropagation();moveLightboxPhoto(1)">›</button><div class="lightbox-title"></div><div class="lightbox-count"></div></div></body></html>
