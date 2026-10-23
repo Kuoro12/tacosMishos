@@ -79,13 +79,22 @@ html,body{max-width:100%;overflow-x:clip}img,video,iframe{max-width:100%}
 html,body{overflow-x:clip!important;max-width:100%}
 /* El botón se moverá directamente al body mediante JS, fuera del header con backdrop-filter. */
 .cartbtn{position:fixed!important;right:16px!important;bottom:16px!important;top:auto!important;left:auto!important;z-index:500!important;box-shadow:0 6px 22px #0003!important}
-/* Las categorías se pegan debajo de la cabecera cuando se llega a ellas. */
-.categories{position:sticky!important;top:72px!important;bottom:auto!important;z-index:100!important;width:100%;background:#fffdf8!important;align-self:stretch}
+
+/* --- MODIFICACIÓN PARA LAS CATEGORÍAS --- */
+.categories{position:sticky!important;top:76px!important;bottom:auto!important;z-index:100!important;width:100%;background:#fffdf8!important;align-self:stretch}
+/* Cuando la línea informativa (ticker) se fija arriba, sumamos su altura exacta con calc() */
+body.ticker-fixed-active .categories{top:calc(var(--tm-ticker-height, 36px) + 76px)!important}
+
 .modalback{z-index:1000!important}
 .lightbox{z-index:1100!important}
-@media(max-width:760px){.categories{top:60px!important}.cartbtn{right:12px!important;bottom:14px!important}}
-/* No dejar que la barra de categorías compita con el modal abierto. */
-body:has(#cartModal.open) .categories{z-index:1!important}
+
+@media(max-width:760px){
+  .categories{top:60px!important}
+  body.ticker-fixed-active .categories{top:calc(var(--tm-ticker-height, 36px) + 60px)!important}
+  .cartbtn{right:12px!important;bottom:14px!important}
+}
+/* ---------------------------------------- */
+
 /* Noticia en movimiento que permanece fija al llegar arriba */
 .ticker {
   position: relative;
