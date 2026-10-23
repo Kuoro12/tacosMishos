@@ -86,11 +86,12 @@ html,body{overflow-x:clip!important;max-width:100%}
 @media(max-width:760px){.categories{top:60px!important}.cartbtn{right:12px!important;bottom:14px!important}}
 /* No dejar que la barra de categorías compita con el modal abierto. */
 body:has(#cartModal.open) .categories{z-index:1!important}
-/* La nota verde sigue fija arriba y en movimiento */
-.topbar {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 200 !important;
+/* Noticia en movimiento que permanece fija al llegar arriba */
+.ticker {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 /* La barra del logo y nombre NO queda fija */
 header.nav {
