@@ -86,6 +86,42 @@ html,body{overflow-x:clip!important;max-width:100%}
 @media(max-width:760px){.categories{top:60px!important}.cartbtn{right:12px!important;bottom:14px!important}}
 /* No dejar que la barra de categorías compita con el modal abierto. */
 body:has(#cartModal.open) .categories{z-index:1!important}
+  
+/* Noticia en movimiento que permanece fija al llegar arriba */
+.ticker {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+.ticker > span {
+  display: inline-block;
+  min-width: max-content;
+  padding-left: 100%;
+  animation: tmTicker 22s linear infinite;
+  will-change: transform;
+}
+@keyframes tmTicker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+/* Estado fijo activado por JavaScript */
+.ticker.is-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 3px 12px #0002;
+}
+body.ticker-fixed-active .nav {
+  top: var(--tm-ticker-height, 36px) !important;
+}
 </style>
 
 </head>
@@ -143,7 +179,44 @@ let activeCategory='Todos';
 const money=n=>new Intl.NumberFormat('es-ES').format(Number(n)||0)+' CUP';
 const saveAll=()=>{localStorage.setItem('tm_products_v4',JSON.stringify(products));localStorage.setItem('tm_settings_v4',JSON.stringify(settings));};
 const saveCart=()=>{localStorage.setItem('tm_cart_v4',JSON.stringify(cart));localStorage.setItem('tm_cart_saved_at',String(Date.now()));};
-function mapDbProduct(r){const rawAvailable=r.disponible;const available=rawAvailable===true||rawAvailable===1||String(rawAvailable).toLowerCase()==='true'||String(rawAvailable)==='1';const p={id:r.id,name:r.nombre,price:Number(r.precio)||0,category:r.categoria,desc:r.descripcion||'',emoji:'🌮',image_url:r.imagen_url||'',images:Array.isArray(r.fotos)?r.fotos:[],available};p.orderType=detectCustomOrderType(p);return p;}
+function mapDbProduct(r) {
+  const rawAvailable =
+    r.disponible ??
+    r.available ??
+    r.disponibilidad ??
+    r.estado ??
+    true;
+  const value = String(rawAvailable)
+    .trim()
+    .toLowerCase();
+  const unavailableValues = [
+    'false',
+    '0',
+    'no',
+    'agotado',
+    'agotada',
+    'unavailable',
+    'out of stock',
+    'sin stock'
+  ];
+  const available =
+    rawAvailable !== false &&
+    rawAvailable !== 0 &&
+    !unavailableValues.includes(value);
+  const p = {
+    id: r.id,
+    name: r.nombre,
+    price: Number(r.precio) || 0,
+    category: r.categoria,
+    desc: r.descripcion || '',
+    emoji: '🌮',
+    image_url: r.imagen_url || '',
+    images: Array.isArray(r.fotos) ? r.fotos : [],
+    available
+  };
+  p.orderType = detectCustomOrderType(p);
+  return p;
+}
 const CATEGORY_ORDER=['Combos con Queso Blanco','Combos Gouda','Tacos Extras con QuesoBlanco','Tacos Extras con Gouda','Agregados','Salsa','Empanadas','Hamburguesas','Bebidas'];
 const DEFAULT_DELIVERY_ZONES=[['Vista alegre',1000],['Sueño',700],['Altamira',1500],['Chicharrones',1200],['Alameda',600],['Micro 9',1300],['Versalles',1500],['Quintero',800],['Trocha Arriba',800],['Micro 7',1300],['Micro 8',1500],['Rajayoja',600],['Pastorita',600],['Santa Bárbara',500],['30 de noviembre',750],['Santa María',1200],['Marialina',700],['Centro de la Ciudad',750],['Barca de Oro',1300],['Vista hermosa',1300],['Flores',750],['San Pedrito',1200],['Salao',1500],['Zaza',1000],['Caney',1500],['Universidad de Oriente',800],['Antonio maceo',1500],['Veguita de galo',1000],['Los pinos',800],['Artes y Oficio',700],['Fomento',500],['Agüero',1500],['Distrito José Marti',1200],['Micro 3',1500],['Los olmos',800],['Marti',750],['Mariana de la torre',1000],['Trocha Abajo',1000]].map(([name,price])=>({name,price}));
 let siteSettings={announcement:'🌮 Tacos, combos y mucho sabor. ¡Elige tus favoritos!',delivery_enabled:true,pickup_enabled:true,delivery_zones:DEFAULT_DELIVERY_ZONES};
@@ -213,5 +286,41 @@ categories();renderProducts();updateCartCount();toggleAddress();loadSiteSettings
 // Mover el botón al body hace que position:fixed se calcule respecto a la ventana.
 const floatingCartButton=document.querySelector('.nav .cartbtn');
 if(floatingCartButton){document.body.appendChild(floatingCartButton);floatingCartButton.setAttribute('aria-label','Abrir mi pedido');}
+(function setupStickyAnnouncementTicker() {
+  const ticker = document.getElementById('announcementTicker');
+  const nav = document.querySelector('.nav');
+  if (!ticker || !nav) return;
+  let originalTop = 0;
+  let ticking = false;
+  function measure() {
+    const wasFixed = ticker.classList.contains('is-fixed');
+    ticker.classList.remove('is-fixed');
+    document.body.classList.remove('ticker-fixed-active');
+    originalTop =
+      ticker.getBoundingClientRect().top + window.scrollY;
+    document.documentElement.style.setProperty(
+      '--tm-ticker-height',
+      ticker.offsetHeight + 'px'
+    );
+    if (wasFixed) update();
+  }
+  function update() {
+    ticking = false;
+    const shouldFix = window.scrollY >= originalTop;
+    ticker.classList.toggle('is-fixed', shouldFix);
+    document.body.classList.toggle(
+      'ticker-fixed-active',
+      shouldFix
+    );
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }, { passive: true });
+  window.addEventListener('resize', measure);
+  measure();
+})();
 </script>
 <div class="lightbox" id="productLightbox" role="dialog" aria-modal="true" aria-label="Fotos del producto" onclick="if(event.target===this)closeProductLightbox()"><button type="button" class="lightbox-close" onclick="closeProductLightbox()">Cerrar ✕</button><button type="button" class="lightbox-nav lightbox-prev" aria-label="Foto anterior" onclick="event.stopPropagation();moveLightboxPhoto(-1)">‹</button><img src="" alt="" draggable="false"><button type="button" class="lightbox-nav lightbox-next" aria-label="Foto siguiente" onclick="event.stopPropagation();moveLightboxPhoto(1)">›</button><div class="lightbox-title"></div><div class="lightbox-count"></div></div>\n</body></html>
