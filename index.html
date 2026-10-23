@@ -44,7 +44,7 @@
 .service-shortcuts{max-width:1120px;margin:8px auto 12px;padding:0 22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
 .service-shortcut{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-size:13px;box-shadow:none;cursor:default;pointer-events:none}
 .service-shortcut strong{display:inline;color:var(--green2)}.service-shortcut small{display:inline;margin-left:5px}
-html,body{max-width:100%;overflow-x:hidden}img,video,iframe{max-width:100%}
+html,body{max-width:100%;overflow-x:clip}img,video,iframe{max-width:100%}
 @media(max-width:600px){.navin{padding:10px 12px;gap:8px}.brand{font-size:15px;gap:6px}.brand small{font-size:8px;letter-spacing:.7px}.logo,.brand img{width:40px!important;height:40px!important}.cartbtn,.adminbtn{padding:9px 10px;font-size:12px}.hero{grid-template-columns:minmax(0,1fr)!important;padding:22px 14px 12px;gap:12px}.heroart{display:none}.hero h1{font-size:clamp(27px,8vw,38px)!important;letter-spacing:-.8px!important}.hero p{font-size:15px}.wrap{padding:14px 12px 50px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product{min-width:0}.productbody{padding:11px;min-width:0}.product h3{font-size:14px;overflow-wrap:anywhere;word-break:normal;white-space:normal;line-height:1.3}.product p{font-size:12px;overflow-wrap:anywhere;word-break:normal;white-space:normal;line-height:1.45;display:block}.productfoot{gap:5px}.price{font-size:15px}.site-tabs{gap:3px;padding:7px 5px}.site-tabs a{font-size:11px;padding:8px 9px}.service-shortcuts{padding:0 8px;gap:6px}.service-shortcut{font-size:11px;padding:7px 10px}.sectionhead{align-items:stretch;flex-direction:column}.search{width:100%;min-width:0}.info-grid,.adminlayout{grid-template-columns:minmax(0,1fr)}}
 
 /* Ajustes solicitados: titular en dos líneas y controles persistentes al desplazarse. */
@@ -59,15 +59,16 @@ html,body{max-width:100%;overflow-x:hidden}img,video,iframe{max-width:100%}
 </style>
 
 <style id="fix-sticky-menu-and-cart">
-/* Mantener el carrito fijo mientras se desplaza la página. */
-.cartbtn{position:fixed!important;right:16px!important;bottom:16px!important;top:auto!important;z-index:120!important;box-shadow:0 6px 22px #0003!important}
-/* Los filtros se quedan pegados debajo de la navegación, nunca en la parte inferior. */
-.categories{position:sticky!important;top:82px!important;bottom:auto!important;z-index:12!important;width:100%;background:#fffdf8;align-self:stretch}
-/* El modal del pedido debe cubrir los filtros y el resto de la página. */
-.modalback{z-index:200!important}
-.lightbox{z-index:300!important}
-@media(max-width:760px){.categories{top:58px!important}.cartbtn{right:12px!important;bottom:14px!important}}
-/* Mientras el pedido está abierto, no mostrar la barra pegajosa por encima del modal. */
+/* Usar clip en vez de hidden para no crear un contenedor de scroll que rompa sticky. */
+html,body{overflow-x:clip!important;max-width:100%}
+/* El botón se moverá directamente al body mediante JS, fuera del header con backdrop-filter. */
+.cartbtn{position:fixed!important;right:16px!important;bottom:16px!important;top:auto!important;left:auto!important;z-index:500!important;box-shadow:0 6px 22px #0003!important}
+/* Las categorías se pegan debajo de la cabecera cuando se llega a ellas. */
+.categories{position:sticky!important;top:72px!important;bottom:auto!important;z-index:100!important;width:100%;background:#fffdf8!important;align-self:stretch}
+.modalback{z-index:1000!important}
+.lightbox{z-index:1100!important}
+@media(max-width:760px){.categories{top:60px!important}.cartbtn{right:12px!important;bottom:14px!important}}
+/* No dejar que la barra de categorías compita con el modal abierto. */
 body:has(#cartModal.open) .categories{z-index:1!important}
 </style>
 
@@ -189,5 +190,9 @@ const phoneInput=document.getElementById('customerPhone');if(phoneInput){phoneIn
 function filterNameInput(el){if(!el)return;el.addEventListener('input',()=>{el.value=el.value.replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ '’-]/g,'').replace(/\s{2,}/g,' ').slice(0,80);});}
 filterNameInput(document.getElementById('customerName'));filterNameInput(document.getElementById('reviewName'));
 categories();renderProducts();updateCartCount();toggleAddress();loadSiteSettings();loadProductsFromCloud();loadSharedReviews();updateBusinessStatus();setInterval(updateBusinessStatus,1000);
+// Un elemento fixed dentro de un ancestro con backdrop-filter puede quedar fijo al header.
+// Mover el botón al body hace que position:fixed se calcule respecto a la ventana.
+const floatingCartButton=document.querySelector('.nav .cartbtn');
+if(floatingCartButton){document.body.appendChild(floatingCartButton);floatingCartButton.setAttribute('aria-label','Abrir mi pedido');}
 </script>
 <div class="lightbox" id="productLightbox" role="dialog" aria-modal="true" aria-label="Fotos del producto" onclick="if(event.target===this)closeProductLightbox()"><button type="button" class="lightbox-close" onclick="closeProductLightbox()">Cerrar ✕</button><button type="button" class="lightbox-nav lightbox-prev" aria-label="Foto anterior" onclick="event.stopPropagation();moveLightboxPhoto(-1)">‹</button><img src="" alt="" draggable="false"><button type="button" class="lightbox-nav lightbox-next" aria-label="Foto siguiente" onclick="event.stopPropagation();moveLightboxPhoto(1)">›</button><div class="lightbox-title"></div><div class="lightbox-count"></div></div>\n</body></html>
